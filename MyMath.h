@@ -12,6 +12,10 @@ struct Matrix3x3 {
 	float m[3][3];
 };
 
+struct Matrix4x4 {
+	float m[4][4];
+};
+
 Vector2 Add(const Vector2& v1, const Vector2& v2);
 Vector2 Multiply(Vector2 vector1, Vector2 vector2);
 Matrix2x2 Transpose(Matrix2x2 matrix);
@@ -41,3 +45,12 @@ float Dot(const Vector3& v1, const Vector3& v2);
 float Length(const Vector3& v);
 Vector3 Normalize(const Vector3& v);
 void VectorScreenPrintf(int x, int y, Vector3& vector, const char* label);
+
+// 00_02
+Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
+Matrix4x4 Inverse(const Matrix4x4& m);
+Matrix4x4 Transpose(const Matrix4x4& m);
+Matrix4x4 MakeIdentity4x4();
+void MatrixScreenPrintf(int x, int y, Matrix4x4& matrix, const char* label);

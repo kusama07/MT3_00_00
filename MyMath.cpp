@@ -323,10 +323,94 @@ Vector3 Normalize(const Vector3& v)
 	return result;
 }
 
-static const int kColumnWidth = 60;
 void VectorScreenPrintf(int x,int y,Vector3& vector,const char* label) {
+static const int kColumnWidth = 60;
 	Novice::ScreenPrintf(x, y, "%.02f", vector.x);
 	Novice::ScreenPrintf(x + kColumnWidth, y, "%.02f", vector.y);
 	Novice::ScreenPrintf(x + kColumnWidth * 2, y, "%.02f", vector.z);
 	Novice::ScreenPrintf(x + kColumnWidth * 3, y, "%s", label);
 }
+
+
+Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2)
+{
+	Matrix4x4 result = {};
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			result.m[i][j] = m1.m[i][j] + m2.m[i][j];
+		}
+	}
+	return result;
+}
+
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2)
+{
+	Matrix4x4 result = {};
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			result.m[i][j] = m1.m[i][j] - m2.m[i][j];
+		}
+	}
+	return result;
+}
+
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2)
+{
+	Matrix4x4 result = {};
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			for (int k = 0; k < 4; k++) {
+				result.m[i][j] += m1.m[i][k] * m2.m[k][j];
+			}
+		}
+	}
+	return result;
+}
+
+Matrix4x4 Inverse(const Matrix4x4& m)
+{
+
+}
+
+Matrix4x4 Transpose(const Matrix4x4& m)
+{
+	Matrix4x4 result = {};
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			result.m[i][j] = m.m[j][i];
+		}
+	}
+	return result;
+}
+
+Matrix4x4 MakeIdentity4x4()
+{
+	Matrix4x4 result = {};
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (i == j) {
+				result.m[i][j] = 1.0f;
+			} else {
+				result.m[i][j] = 0.0f;
+			}
+		}
+	}
+	return result;
+}
+
+void MatrixScreenPrintf(int x, int y, Matrix4x4& matrix, const char* label) {
+	static const int kRowHeight = 20;
+	static const int kColumnWidth = 60;
+	
+	Novice::ScreenPrintf(x, y, "%s", label);
+	for (int row = 0; row < 4; ++row) {
+		for (int column = 0; column < 4; ++column) {
+			Novice::ScreenPrintf(
+				x + column * kColumnWidth,
+				20 + y + row * kRowHeight,
+				"%.02f",
+				matrix.m[row][column]
+			);
+		}
+	}
+};
