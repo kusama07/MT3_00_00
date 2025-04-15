@@ -1,4 +1,5 @@
 #include <Novice.h>
+#include "MyMath.h"
 
 const char kWindowTitle[] = "GC1A_03_クサマリョウト_タイトル";
 
