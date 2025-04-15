@@ -1,5 +1,6 @@
 #pragma once
 #include <Vector2.h>
+#include <Vector3.h>
 #include <math.h>
 #include <assert.h>
 
@@ -11,7 +12,7 @@ struct Matrix3x3 {
 	float m[3][3];
 };
 
-Vector2 Add(Vector2 a, Vector2 b);
+Vector2 Add(const Vector2& v1, const Vector2& v2);
 Vector2 Multiply(Vector2 vector1, Vector2 vector2);
 Matrix2x2 Transpose(Matrix2x2 matrix);
 Matrix3x3 Transpose(Matrix3x3 matrix);
@@ -31,3 +32,12 @@ Vector2 Multiply(Vector2 vector, Matrix2x2 matrix);
 Matrix2x2 Subtract(Matrix2x2 matrix1, Matrix2x2 matrix2);
 float Length(const float& v);
 float Length(const Vector2& v);
+
+// 00_01
+Vector3 Add(const Vector3 &v1, const Vector3 &v2);
+Vector3 Subtract(const Vector3& v1, const Vector3& v2);
+Vector3 Multiply(float scalar, const Vector3& v);
+float Dot(const Vector3& v1, const Vector3& v2);
+float Length(const Vector3& v);
+Vector3 Normalize(const Vector3& v);
+void VectorScreenPrintf(int x, int y, Vector3& vector, const char* label);
