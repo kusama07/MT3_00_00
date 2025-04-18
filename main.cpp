@@ -25,13 +25,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-		
+
+		Vector3 scale{ 1.2f,0.79f,-2.1f };
 		Vector3 rotate{ 0.4f,1.43f,-0.8f };
-		Matrix4x4 rotateXMatrix = MakeRotateXMatrix(rotate.x);
-		Matrix4x4 rotateYMatrix = MakeRotateYMatrix(rotate.y);
-		Matrix4x4 rotateZMatrix = MakeRotateZMatrix(rotate.z);
-		Matrix4x4 rotateXYZMatrix = Multiply(rotateXMatrix, Multiply(rotateYMatrix, rotateZMatrix));
-		
+		Vector3 translate{ 2.7f,-4.15f,1.57f };
+		Matrix4x4 worldMatrix = MakeAffineMatrix(scale, rotate, translate);
+
 		///
 		/// ↑更新処理ここまで
 		///
@@ -40,10 +39,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		MatrixScreenPrintf(0, 0, rotateXMatrix, "rotateXMatrix");
-		MatrixScreenPrintf(0, 100, rotateYMatrix, "rotateYMatrix");
-		MatrixScreenPrintf(0, 200, rotateZMatrix, "rotateZMatrix");
-		MatrixScreenPrintf(0, 300, rotateXYZMatrix, "rotateXYZMatrix");
+		MatrixScreenPrintf(0, 0, worldMatrix, "World Matrix");
 
 		///
 		/// ↑描画処理ここまで
