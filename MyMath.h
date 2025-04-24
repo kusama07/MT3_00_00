@@ -72,3 +72,6 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
 Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip);
 Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDeptk, float maxDepth);
+
+// 01_01
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
