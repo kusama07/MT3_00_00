@@ -1,5 +1,10 @@
-#include "MyMath.h"
+﻿#include "MyMath.h"
 #include <Novice.h>
+#include <cmath>
+#include <assert.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 
 Vector2 Add(const Vector2 &v1, const Vector2 &v2)
 {
@@ -709,4 +714,93 @@ Vector3 Cross(const Vector3& v1, const Vector3& v2)
 	result.y = (v1.z * v2.x) - (v1.x * v2.z);
 	result.z = (v1.x * v2.y) - (v1.y * v2.x);
 	return result;
+}
+
+void DrawGrid(const Matrix4x4& viewProjectionMatrix,const Matrix4x4& viewportMatrix) {
+	const float kGridHalfwidth = 2.0f;
+	const uint32_t kSubdivision = 10;
+	const float kGridEvery = (kGridHalfwidth * 2.0f) / float(kSubdivision);
+
+
+	for (uint32_t xIndex = 0; xIndex <= kSubdivision; ++xIndex) {
+		// 上の情報を使ってワールド座標系上の始点と終点を求める
+		Vector3 start = { -kGridHalfwidth + (kGridEvery * xIndex), 0.0f, -kGridHalfwidth };
+		Vector3 end = { -kGridHalfwidth + (kGridEvery * xIndex), 0.0f, kGridHalfwidth };
+		// スクリーン座標系まで変換をかける
+		start = Transform(start, viewProjectionMatrix);
+		start = Transform(start, viewportMatrix);
+
+		end = Transform(end, viewProjectionMatrix);
+		end = Transform(end, viewportMatrix);
+
+		// 変換した座標を使って表示。色はうすい灰色（0xAAAAAAFF）、原点は黒ぐらいがいいが、何でもいい
+		Novice::DrawLine(
+			(int)start.x, (int)start.y, (int)end.x, (int)end.y,
+			0xAAAAAAFF
+		);
+	}
+
+	// 左から右も同じようにジユン順にひいていく
+	for (uint32_t zIndex = 0; zIndex <= kSubdivision; ++zIndex) {
+		Vector3 start = { -kGridHalfwidth, 0.0f, -kGridHalfwidth + (kGridEvery * zIndex) };
+		Vector3 end = { kGridHalfwidth, 0.0f, -kGridHalfwidth + (kGridEvery * zIndex) };
+		start = Transform(start, viewProjectionMatrix);
+		start = Transform(start, viewportMatrix);
+
+		end = Transform(end, viewProjectionMatrix);
+		end = Transform(end, viewportMatrix);
+		Novice::DrawLine(
+			(int)start.x, (int)start.y, (int)end.x, (int)end.y,
+			0xAAAAAAFF
+		);
+	}
+
+}
+
+void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color)
+{
+	const uint32_t kSubdivision = 30;
+	// 経度分割1つ分の角度
+	const float kLonEvery = (2.0f * float(M_PI)) / float(kSubdivision);
+	// 緯度分割1つ分の角度
+	const float kLatEvery = float(M_PI) / float(kSubdivision);
+
+	// 経度の方向に分割 -π/2 ~ π/2
+	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
+		float lat = float(-M_PI) / 2.0f + (kLatEvery * latIndex);
+		// 経度の方向に分割 0 ~ 2π
+		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
+			float lon = lonIndex * kLonEvery;
+			Vector3 a, b, c;
+			// ワールド座標でのa,b,cを求める
+			a.x = sphere.center.x + (sphere.radius * cosf(lat) * cosf(lon));
+			a.y = sphere.center.y + (sphere.radius * sinf(lat));
+			a.z = sphere.center.z + (sphere.radius * cosf(lat) * sinf(lon));
+			b.x = sphere.center.x + (sphere.radius * cosf(lat + kLatEvery) * cosf(lon));
+			b.y = sphere.center.y + (sphere.radius * sinf(lat + kLatEvery));
+			b.z = sphere.center.z + (sphere.radius * cosf(lat + kLatEvery) * sinf(lon));
+			c.x = sphere.center.x + (sphere.radius * cosf(lat) * cosf(lon + kLonEvery));
+			c.y = sphere.center.y + (sphere.radius * sinf(lat));
+			c.z = sphere.center.z + (sphere.radius * cosf(lat) * sinf(lon + kLonEvery));
+			// スクリーン座標系に変換
+			a = Transform(a, viewProjectionMatrix);
+			a = Transform(a, viewportMatrix);
+
+			b = Transform(b, viewProjectionMatrix);
+			b = Transform(b, viewportMatrix);
+
+			c = Transform(c, viewProjectionMatrix);
+			c = Transform(c, viewportMatrix);
+			// スクリーン座標系のa,b,cを使って線を引く
+			Novice::DrawLine(
+				(int)a.x, (int)a.y, (int)b.x, (int)b.y,
+				color
+			);
+			Novice::DrawLine(
+				(int)a.x, (int)a.y, (int)c.x, (int)c.y,
+				color
+			);
+
+		}
+	}
 }

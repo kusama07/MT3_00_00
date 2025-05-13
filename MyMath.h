@@ -75,3 +75,11 @@ Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, f
 
 // 01_01
 Vector3 Cross(const Vector3& v1, const Vector3& v2);
+
+// 01_02
+void DrawGrid(const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix);
+struct Sphere {
+	Vector3 center;
+	float radius;
+};
+void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color);
