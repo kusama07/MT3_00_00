@@ -13,14 +13,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = {0};
 	char preKeys[256] = {0};
 
-	Vector3 rotate{ 1.0f,1.0f,1.0f };
+	Vector3 rotate{ 0.0f,0.0f,0.0f };
 	Vector3 translate{ 1.0f,1.0f,1.0f };
 	Vector3 kLocalVertices[3]{
-		{0.0f, 1.0f, 0.0f},
-		{1.0f, 1.0f, 0.0f},
-		{1.0f, 1.0f, 0.0f}
+		{0.0f, 100.0f, 0.0f},
+		{100.0f, -100.0f, 0.0f},
+		{-100.0f, -100.0f, 0.0f}
 	};
 
+	Vector3 cameraPosition = { 0,0,-1000 };
+	
 	const int kWindowWidth = 1280;
 	const int kWindowHeight = 720;
 
@@ -44,25 +46,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// 前後
 		if (keys[DIK_W]) {
-			translate.y += 1.0f;
+			translate.z += 2.0f;
 		} else if (keys[DIK_S]) {
-			translate.y -= 1.0f;
+			translate.z -= 2.0f;
 		}
 		// 左右
 		if (keys[DIK_A]) {
-			translate.x -= 1.0f;
+			translate.x -= 2.0f;
 		} else if (keys[DIK_D]) {
-			translate.x += 1.0f;
+			translate.x += 2.0f;
 		}
 		// Y軸回転
 		if (keys[DIK_Q]) {
-			rotate.y += 1.0f;
+			rotate.y += 0.1f;
 		} else if (keys[DIK_E]) {
-			rotate.y -= 1.0f;
+			rotate.y -= 0.1f;
 		}
 
 		Matrix4x4 worldMatrix = MakeAffineMatrix({ 1.0f,1.0f,1.0f }, rotate, translate);
-		Matrix4x4 cameraMatrix = MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, { 0.0f,0.0f,0.0f });
+		Matrix4x4 cameraMatrix = MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, cameraPosition);
 		Matrix4x4 viewMatrix = Inverse(cameraMatrix);
 		Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kWindowWidth) / float(kWindowHeight), 0.1f, 100.0f);
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
